@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'drf_yasg',
     'corsheaders',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -133,6 +134,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'users.User'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -147,12 +152,14 @@ EMAIL_USE_SSL = False
 # Настройки разрешений для rest_framework_simplejwt.
 # IsAuthenticated - авторизованный пользователь.
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES':
+        (
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
+        ),
+    'DEFAULT_PERMISSION_CLASSES':
+        (
+            'rest_framework.permissions.IsAuthenticated',
+        ),
 }
 
 # Настройки для Celery
@@ -171,3 +178,6 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",
 ]
+
+# ключ для telegram
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_SECRET_KEY')
