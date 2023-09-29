@@ -1,7 +1,6 @@
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework import status
-
 from app_spa.models import Habit
 from users.models import User
 
@@ -65,7 +64,7 @@ class HabitTestCase(APITestCase):
             'user': self.user.pk
         }
 
-        response = self.client.post(reverse('spa:create_habit'), data=data)  # отправка запроса
+        response = self.client.post(reverse('app_spa:create_habit'), data=data)  # отправка запроса
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)  # проверяем статус ответа
 
@@ -83,7 +82,7 @@ class HabitTestCase(APITestCase):
                 'user': self.user.pk
                 }
 
-        response = self.client.patch(reverse('spa:update_habit', args=[self.habit.pk]), data=data)
+        response = self.client.patch(reverse('app_spa:update_habit', args=[self.habit.pk]), data=data)
         self.habit.refresh_from_db()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # Проверка статуса ответа
@@ -91,14 +90,14 @@ class HabitTestCase(APITestCase):
 
     def test_list_habits(self):
         """Тестирование эндпоинта отображения списка привычек"""
-        response = self.client.get(reverse('spa:habit_list'))  # Запрос на получение списка привычек
+        response = self.client.get(reverse('app_spa:habit_list'))  # Запрос на получение списка привычек
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # Проверка ответа на запрос
 
     def test_list_public_habits(self):
         """Тестирование эндпоинта отображения списка публичных привычек"""
 
-        response = self.client.get(reverse('spa:public_habit_list'))  # Запрос на получение списка привычек
+        response = self.client.get(reverse('app_spa:public_habit_list'))  # Запрос на получение списка привычек
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)  # Проверка ответа на запрос
 
@@ -115,7 +114,7 @@ class HabitTestCase(APITestCase):
                 'user': self.user.pk
                 }
 
-        response = self.client.post(reverse('spa:create_habit'), data=data)  # отправка запроса
+        response = self.client.post(reverse('app_spa:create_habit'), data=data)  # отправка запроса
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  # Проверка статуса ответа
         self.assertEqual(response.json(),
                          {'non_field_errors': ['Время выполнения привычки не должно превышать 120 секунд']})
@@ -133,7 +132,7 @@ class HabitTestCase(APITestCase):
                 'is_public': True,
                 'award': '200 рублей'}
 
-        response = self.client.post(reverse('spa:create_habit'), data=data)  # отправка запроса
+        response = self.client.post(reverse('app_spa:create_habit'), data=data)  # отправка запроса
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  # Проверка статуса ответа
         self.assertEqual(response.json(),
                          {'non_field_errors': ['У приятной привычки (is_pleasant=True) не может быть '
@@ -153,7 +152,7 @@ class HabitTestCase(APITestCase):
                 'user': self.user.pk
                 }
 
-        response = self.client.post(reverse('spa:create_habit'), data=data)  # отправка запроса
+        response = self.client.post(reverse('app_spa:create_habit'), data=data)  # отправка запроса
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  # Проверка статуса ответа
         self.assertEqual(response.json(),
                          {'non_field_errors': ['Нельзя выполнять привычку реже, чем 1 раз в 7 дней']})
@@ -172,7 +171,7 @@ class HabitTestCase(APITestCase):
                 'award': '500 руб.'
                 }
 
-        response = self.client.post(reverse('spa:create_habit'), data=data)  # отправка запроса
+        response = self.client.post(reverse('app_spa:create_habit'), data=data)  # отправка запроса
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  # Проверка статуса ответа
         self.assertEqual(response.json(), {'non_field_errors': ['Невозможно одновременно указать связанную '
                                                                 'привычку и вознаграждение']})
@@ -190,13 +189,13 @@ class HabitTestCase(APITestCase):
                 'user': self.user.pk,
                 }
 
-        response = self.client.post(reverse('spa:create_habit'), data=data)  # отправка запроса
+        response = self.client.post(reverse('app_spa:create_habit'), data=data)  # отправка запроса
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  # Проверка статуса ответа
         self.assertEqual(response.json(), {'non_field_errors': ['В связанные привычки может попасть привычка '
                                                                 'с признаком приятной (is_pleasant=True)']})
 
     def test_destroy_habit(self):
-        response = self.client.delete(reverse('spa:delete', args=[self.habit.pk]))
+        response = self.client.delete(reverse('app_spa:delete', args=[self.habit.pk]))
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)  # Проверка статуса ответа
 
